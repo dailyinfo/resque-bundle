@@ -17,14 +17,14 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('resque');
+        $treeBuilder = new TreeBuilder('resque');
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('vendor_dir')
-                    ->defaultValue('%kernel.root_dir%/../vendor')
+                    ->defaultValue('%kernel.project_dir%/vendor')
                     ->cannotBeEmpty()
                     ->info('Set the vendor dir')
                 ->end()
@@ -80,7 +80,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('root_dir')
-                            ->defaultValue('%kernel.root_dir%')
+                            ->defaultValue('%kernel.project_dir%/src')
                             ->cannotBeEmpty()
                             ->info('The root dir of worker registered app')
                         ->end()

@@ -3,7 +3,6 @@
 namespace ResqueBundle\Resque\Command;
 
 use ResqueBundle\Resque\Resque;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -40,5 +39,7 @@ class CleanUpWorkersCommand extends ContainerAwareCommand
                 $worker->getWorker()->unregisterWorker();
             }
         }
+
+        return 0;
     }
 }

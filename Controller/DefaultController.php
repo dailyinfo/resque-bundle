@@ -3,7 +3,7 @@
 namespace ResqueBundle\Resque\Controller;
 
 use ResqueBundle\Resque\Resque;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -11,8 +11,15 @@ use Symfony\Component\HttpFoundation\Response;
  * Class DefaultController
  * @package ResqueBundle\Resque\Controller
  */
-class DefaultController extends Controller
+class DefaultController extends AbstractController
 {
+    private $resque;
+
+    public function __construct(Resque $resque)
+    {
+        $this->resque = $resque;
+    }
+
     /**
      * @return Response
      */
@@ -21,7 +28,7 @@ class DefaultController extends Controller
         $this->getResque()->pruneDeadWorkers();
 
         return $this->render(
-            'ResqueBundle:Default:index.html.twig',
+            '@Resque/Default/index.html.twig',
             [
                 'resque' => $this->getResque(),
             ]
@@ -33,7 +40,7 @@ class DefaultController extends Controller
      */
     protected function getResque()
     {
-        return $this->get('resque');
+        return $this->resque;
     }
 
     /**
@@ -53,7 +60,7 @@ class DefaultController extends Controller
         }
 
         return $this->render(
-            'ResqueBundle:Default:queue_show.html.twig',
+            '@Resque/Default/queue_show.html.twig',
             [
                 'queue'      => $queue,
                 'jobs'       => $jobs,
@@ -111,7 +118,7 @@ class DefaultController extends Controller
         }
 
         return $this->render(
-            'ResqueBundle:Default:failed_list.html.twig',
+            '@Resque/Default/failed_list.html.twig',
             [
                 'jobs'       => $jobs,
                 'showingAll' => $showingAll,
@@ -125,7 +132,7 @@ class DefaultController extends Controller
     public function workersAction()
     {
         return $this->render(
-            'ResqueBundle:Default:workers.html.twig',
+            '@Resque/Default/workers.html.twig',
             [
                 'resque' => $this->getResque(),
             ]
@@ -138,7 +145,7 @@ class DefaultController extends Controller
     public function listScheduledAction()
     {
         return $this->render(
-            'ResqueBundle:Default:scheduled_list.html.twig',
+            '@Resque/Default/scheduled_list.html.twig',
             [
                 'timestamps' => $this->getResque()->getDelayedJobTimestamps()
             ]
@@ -159,7 +166,7 @@ class DefaultController extends Controller
         }
 
         return $this->render(
-            'ResqueBundle:Default:scheduled_timestamp.html.twig',
+            '@Resque/Default/scheduled_timestamp.html.twig',
             [
                 'timestamp' => $timestamp,
                 'jobs'      => $jobs

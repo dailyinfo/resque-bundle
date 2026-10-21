@@ -2,7 +2,6 @@
 
 namespace ResqueBundle\Resque\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -105,7 +104,7 @@ class StartScheduledWorkerCommand extends ContainerAwareCommand
             $env = NULL;
         }
 
-        $process = new Process($workerCommand, NULL, $env, NULL, NULL);
+        $process = Process::fromShellCommandline($workerCommand, NULL, $env, NULL, NULL);
 
         $output->writeln(\sprintf('Starting worker <info>%s</info>', $process->getCommandLine()));
 
@@ -125,5 +124,7 @@ class StartScheduledWorkerCommand extends ContainerAwareCommand
             $output->writeln(\sprintf('<info>Worker started</info> %s:%s', $hostname, $pid));
             file_put_contents($pidFile, $pid);
         }
+
+        return 0;
     }
 }
